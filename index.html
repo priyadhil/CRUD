@@ -89,9 +89,9 @@
                         <input type="email" name="" required id="empEmail" class=" ml-2 form-control" placeholder="Employee Email">
                     </div>
                     <div class="w-100 text-center">
-                        <button type="submit" id="button" class="btn btn-dark mt-1">Submit
+                        <button type="submit" id="submit" class="btn btn-dark mt-1">Submit
                         </button>
-                        <button type="submit" id="button" class="btn btn-dark mt-1" onclick="clearFields()">Clear
+                        <button type="submit" id="clear" class="btn btn-dark mt-1" onclick="clearFields()">Clear
                             </button>
                     </div>
                   </form>
@@ -122,8 +122,9 @@
     </div>
     <script>
         var empArray = [];
+        var selectedRow = null;
         function init() {
-            //document.getElementById('tablebody').innerHTML = "";
+            document.getElementById('tablebody').innerHTML = "";
             if(localStorage.empRecord) {
                 empArray = JSON.parse(localStorage.empRecord);
                 for(var i = 0; i < empArray.length; i++){
@@ -145,11 +146,17 @@
     let emp = {
         empId : empId, empName : empName, empDep : empDep, empMob : empMob, empEmail : empEmail
     }
-    empArray.push(emp);
-    console.log(empArray);
+    if (selectedRow == null) {
+      empArray.push(emp);
+      console.log(empArray);
+    } else {
+        empArray.splice(selectedIndex, 1, emp);
+    }
+    
     localStorage.empRecord = JSON.stringify(empArray);
-
-    prepareTableCell(i, empId, empName, empDep, empMob, empEmail);
+    init();
+    clearFields();
+   // prepareTableCell(i, empId, empName, empDep, empMob, empEmail);
    
    }
    function prepareTableCell(index, empId, empName, empDep, empMob, empEmail) {
@@ -167,28 +174,33 @@
        empDepCell.innerHTML = empDep;
        empMobCell.innerHTML = empMob;
        empEmailCell.innerHTML = empEmail;
-       empOptionCell.innerHTML = '<button class="btn btn-warning onlCick="updateTableRow('+index+')">Update</button> <button class="btn btn-warning" onClick="deleteTableRow('+index+')">Delete</delete>';
+       empOptionCell.innerHTML = '<button class="btn btn-warning" onlCick="editTableRow(this)">Update</button> <button class="btn btn-warning" onClick="deleteTableRow('+index+')">Delete</delete>';
 
    }
    function clearFields() {
-    document.getElementById('form').reset();
+    document.getElementById('empId').value = "";
+    document.getElementById('empName').value = "";
+    document.getElementById('empDep').value = "";
+    document.getElementById('empMob').value = "";
+    document.getElementById('empEmail').value = "";
+    selectedRow = null;
    }
    function deleteTableRow(index) {
        let table = document.getElementById('regTable');
        table.deleteRow(index+1);
        empArray.splice(index,1);
        localStorage.empRecord = JSON.stringify(empArray);
-       //init();
+       init();
        
    }
-  function updateTableRow(index) {
-      let empObj = empArray[index];
-    document.getElementById('empId').value = empObj.empId;
-    document.getElementById('empName').value = empObj.empName;
-    document.getElementById('empDep').value = empObj.empDep;
-    document.getElementById('empMob').value = empObj.empMob;
-    document.getElementById('empEmail').value = empObj.empEmail;
-        console.log(empObj);
+   function editTableRow(td) {
+    selectedRow = td.parentElement.parentElement;
+    document.getElementById('empId').value = selectedRow.cells[0].innerHtml;
+    document.getElementById('empName').value = selectedRow.cells[1].innerHtml;
+    document.getElementById('empDep').value = selectedRow.cells[2].innerHtml;
+    document.getElementById('empMob').value = selectedRow.cells[3].innerHtml;
+    document.getElementById('empEmail').value = selectedRow.cells[4].innerHtml;
+  
   }
     </script>
   </body>
