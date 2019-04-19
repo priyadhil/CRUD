@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>CRUD - Read</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/common.css" />
+  </head>
+  <body onload="init()">
+    <div class="container-fluid">
+      <div class="header  bg-warning ">
+        <h1 class="text-center text-uppercase">
+          crud 
+        </h1>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-xs-6 col-sm-3 nav-side-menu">
+          <div class="brand">Select Option</div>
+          <i
+            class="fa fa-bars fa-2x toggle-btn"
+            data-toggle="collapse"
+            data-target="#menu-content"
+          ></i>
+
+          <div>
+            <ul id="menu-content">
+              <li>
+                <a href="index.html">
+                  <i class="fa fa-folder-plus fa-lg"></i> Add New
+                </a>
+              </li>
+              <li class="active">
+                <a href="read.html">
+                  <i class="fa fa-clipboard-list fa-lg text-warning"></i> List All
+                </a>
+              </li>
+
+              <li>
+                <a href="bmi.html"
+                  ><i class="fa fa-pencil-alt fa-lg"></i> Update
+                </a>
+              </li>
+
+              <li>
+                <a href="delete.html"
+                  ><i class="fa fa-trash-alt fa-lg"></i> Delete
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-9 col-xs-6 col-sm-12 w-50 m-auto main-container">
+            <div class="card mt-5">
+                <div class="card-header text-center bg-dark  h-25">
+                    <h3> All Employee Details </h3>
+                </div>
+                <div class="card-body bg-secondary">
+                    <div class="table-responsive mt-1 mtable">
+                        <table id="regTable" class="table table-stripped table-bordered table-hover text-light">
+                            <thead>
+                                <tr class="bg-dark">
+                                    <td>Id</td>
+                                    <td>Name</td>
+                                    <td>Department</td>
+                                    <td>Contact No</td>
+                                    <td>Email</td>
+                                </tr>
+                            </thead>
+                            <tbody id='tablebody'>
+        
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    <script>
+        
+        function init() {
+            if(localStorage.empRecord) {
+                empArray = JSON.parse(localStorage.empRecord);
+                for(var i = 0; i < empArray.length; i++){
+                prepareTableCell(i,empArray[i].empId, empArray[i].empName, empArray[i].empDep, empArray[i].empMob, empArray[i].empEmail);
+                }
+            }
+        }
+    
+   
+   
+   function prepareTableCell(index,empId, empName, empDep, empMob, empEmail) {
+       let table = document.getElementById('regTable');
+       let row = table.insertRow();
+       let empIdCell = row.insertCell(0);
+       let empNameCell = row.insertCell(1);
+       let empDepCell = row.insertCell(2);
+       let empMobCell = row.insertCell(3);
+       let empEmailCell = row.insertCell(4);
+
+       empIdCell.innerHTML = empId;
+       empNameCell.innerHTML = empName;
+       empDepCell.innerHTML = empDep;
+       empMobCell.innerHTML = empMob;
+       empEmailCell.innerHTML = empEmail;
+
+   }
+
+    </script>
+  </body>
+</html>

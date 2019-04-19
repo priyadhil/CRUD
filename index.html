@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>CRUD</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/common.css" />
+  </head>
+  <body  onload="init()">
+    <div class="container-fluid">
+      <div class="header  bg-warning ">
+        <h1 class="text-center text-uppercase">
+          crud
+        </h1>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-xs-6 col-sm-3 nav-side-menu">
+          <div class="brand">Select Option</div>
+          <i
+            class="fa fa-bars fa-2x toggle-btn"
+            data-toggle="collapse"
+            data-target="#menu-content"
+          ></i>
+
+          <div>
+            <ul id="menu-content">
+              <li class="active">
+                <a href="index.html">
+                  <i class="fa fa-folder-plus fa-lg text-warning"></i> Add New
+                </a>
+              </li>
+              <li>
+                <a href="read.html">
+                  <i class="fa fa-clipboard-list fa-lg"></i> List All
+                </a>
+              </li>
+
+              <li>
+                <a href="bmi.html"
+                  ><i class="fa fa-pencil-alt fa-lg"></i> Update
+                </a>
+              </li>
+
+              <li>
+                <a href="delete.html"
+                  ><i class="fa fa-trash-alt fa-lg"></i> Delete
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-9 col-xs-6 col-sm-12 w-50 m-auto main-container">
+          <div class="card mt-1">
+              <div class="card-header text-center bg-dark  h-25">
+               <h3> Employee Details </h3>
+              </div>
+              <div class="card-body bg-secondary">
+                  <form id="form" class="form-inline">
+                      <div class="form-group">
+                          <label class="ml-4 pl-5">Id </label>
+                          <input type="text" required name="name" id="empId" class="ml-2 form-control" placeholder="Employee Id">
+                      </div>
+                      <div class="form-group mt-1">
+                        <label class="ml-2 pl-4 mt-1">Name </label>
+                        <input type="text" name="" required id="empName" class="ml-2 form-control" placeholder="Employee Name">
+                    </div>
+                    <div class="form-group mt-1">
+                        <label>Department </label>
+                        <input type="text" name="" required id="empDep" class="ml-2 form-control" placeholder="Department">
+                    </div>
+                    <div class="form-group mt-1">
+                        <label class="ml-1">Phone No </label>
+                        <input type="number" name="" required id="empMob" class="ml-2 form-control" placeholder="Contact No">
+                    </div>
+                    <div class="form-group mt-1">
+                        <label class="pl-5">Email </label>
+                        <input type="email" name="" required id="empEmail" class=" ml-2 form-control" placeholder="Employee Email">
+                    </div>
+                    <div class="w-100 text-center">
+                        <button type="submit" id="button" class="btn btn-dark mt-1">Submit
+                        </button>
+                        <button type="submit" id="button" class="btn btn-dark mt-1" onclick="clearFields()">Clear
+                            </button>
+                    </div>
+                  </form>
+              </div>
+              <div class="card-footer">
+                  <span class="text-danger"></span>
+              </div>
+          </div>
+           <div class="table-responsive mt-1 mtable">          
+                <table id="regTable" class="table table-stripped table-bordered table-hover text-light">
+<thead>
+    <tr  class="bg-dark">
+        <td>Id</td>
+        <td>Name</td>
+        <td>Department</td>
+        <td>Contact No</td>
+        <td>Email</td>
+        <td>Action</td>
+    </tr>
+</thead>
+<tbody id="tablebody">
+
+</tbody>
+</table>
+                    </div> 
+      </div>
+     
+    </div>
+    <script>
+        var empArray = [];
+        function init() {
+            //document.getElementById('tablebody').innerHTML = "";
+            if(localStorage.empRecord) {
+                empArray = JSON.parse(localStorage.empRecord);
+                for(var i = 0; i < empArray.length; i++){
+                prepareTableCell(i, empArray[i].empId, empArray[i].empName, empArray[i].empDep, empArray[i].empMob, empArray[i].empEmail);
+                }
+            }
+        }
+     document.getElementById('form').addEventListener('submit', e => {
+        let empId = document.getElementById('empId').value;
+        let empName = document.getElementById('empName').value;
+        let empDep = document.getElementById('empDep').value;
+        let empMob = document.getElementById('empMob').value;
+        let empEmail = document.getElementById('empEmail').value;
+        createEmp(empId, empName, empDep, empMob, empEmail);
+        e.preventDefault();
+   });
+   
+   function createEmp(empId, empName, empDep, empMob, empEmail){
+    let emp = {
+        empId : empId, empName : empName, empDep : empDep, empMob : empMob, empEmail : empEmail
+    }
+    empArray.push(emp);
+    console.log(empArray);
+    localStorage.empRecord = JSON.stringify(empArray);
+
+    prepareTableCell(i, empId, empName, empDep, empMob, empEmail);
+   
+   }
+   function prepareTableCell(index, empId, empName, empDep, empMob, empEmail) {
+       let table = document.getElementById('tablebody');
+       let row = table.insertRow();
+       let empIdCell = row.insertCell(0);
+       let empNameCell = row.insertCell(1);
+       let empDepCell = row.insertCell(2);
+       let empMobCell = row.insertCell(3);
+       let empEmailCell = row.insertCell(4);
+       let empOptionCell = row.insertCell(5);
+
+       empIdCell.innerHTML = empId;
+       empNameCell.innerHTML = empName;
+       empDepCell.innerHTML = empDep;
+       empMobCell.innerHTML = empMob;
+       empEmailCell.innerHTML = empEmail;
+       empOptionCell.innerHTML = '<button class="btn btn-warning onlCick="updateTableRow('+index+')">Update</button> <button class="btn btn-warning" onClick="deleteTableRow('+index+')">Delete</delete>';
+
+   }
+   function clearFields() {
+    document.getElementById('form').reset();
+   }
+   function deleteTableRow(index) {
+       let table = document.getElementById('regTable');
+       table.deleteRow(index+1);
+       empArray.splice(index,1);
+       localStorage.empRecord = JSON.stringify(empArray);
+       //init();
+       
+   }
+  function updateTableRow(index) {
+      let empObj = empArray[index];
+    document.getElementById('empId').value = empObj.empId;
+    document.getElementById('empName').value = empObj.empName;
+    document.getElementById('empDep').value = empObj.empDep;
+    document.getElementById('empMob').value = empObj.empMob;
+    document.getElementById('empEmail').value = empObj.empEmail;
+        console.log(empObj);
+  }
+    </script>
+  </body>
+</html>
